@@ -1,4 +1,4 @@
-// test push
+// test push2
 module.exports = function searchProducts () {
   return (req: Request, res: Response, next: NextFunction) => {
     let criteria: any = req.query.q === 'undefined' ? '' : req.query.q ?? ''
