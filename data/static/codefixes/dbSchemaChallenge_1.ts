@@ -1,3 +1,4 @@
+// test1
 module.exports = function searchProducts () {
   return (req: Request, res: Response, next: NextFunction) => {
     // TODO: fix it
