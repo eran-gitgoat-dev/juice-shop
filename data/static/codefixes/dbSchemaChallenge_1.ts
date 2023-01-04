@@ -1,4 +1,6 @@
 // test5
+// added line 
+
 module.exports = function searchProducts () {
   return (req: Request, res: Response, next: NextFunction) => {
     // TODO: fix it
