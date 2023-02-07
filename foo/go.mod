@@ -1,6 +1,5 @@
 module github.com/ClickHouse/ClickHouse/programs/diagnostics
 
-
 go 1.19
 
 require (
