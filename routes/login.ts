@@ -4,17 +4,17 @@
  */
 
 import models = require('../models/index')
-import { Request, Response, NextFunction } from 'express'
-import { User } from '../data/types'
+import { type Request, type Response, type NextFunction } from 'express'
+import { type User } from '../data/types'
 import { BasketModel } from '../models/basket'
 import { UserModel } from '../models/user'
 import challengeUtils = require('../lib/challengeUtils')
+import config from 'config'
 
-const utils = require('../lib/utils')
+import * as utils from '../lib/utils'
 const security = require('../lib/insecurity')
 const challenges = require('../data/datacache').challenges
 const users = require('../data/datacache').users
-const config = require('config')
 
 // vuln-code-snippet start loginAdminChallenge loginBenderChallenge loginJimChallenge
 module.exports = function login () {
@@ -47,6 +47,7 @@ module.exports = function login () {
             }
           })
         } else if (user.data?.id) {
+          // @ts-expect-error FIXME some properties missing in user - vuln-code-snippet hide-line
           afterLogin(user, res, next)
         } else {
           res.status(401).send(res.__('Invalid email or password.'))

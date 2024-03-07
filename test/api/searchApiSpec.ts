@@ -4,8 +4,9 @@
  */
 
 import frisby = require('frisby')
-import { Product } from '../../data/types'
-import config = require('config')
+import { expect } from '@jest/globals'
+import { type Product } from '../../data/types'
+import config from 'config'
 const security = require('../../lib/insecurity')
 
 const christmasProduct = config.get<Product[]>('products').filter(({ useForChristmasSpecialChallenge }: Product) => useForChristmasSpecialChallenge)[0]

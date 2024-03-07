@@ -3,22 +3,29 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { Request, Response, NextFunction } from 'express'
-import { Challenge, Product } from '../data/types'
-import { JwtPayload, VerifyErrors } from 'jsonwebtoken'
+import { type Request, type Response, type NextFunction } from 'express'
+import { type Challenge, type Product } from '../data/types'
+import { type JwtPayload, type VerifyErrors } from 'jsonwebtoken'
 import { FeedbackModel } from '../models/feedback'
 import { ComplaintModel } from '../models/complaint'
 import { Op } from 'sequelize'
 import challengeUtils = require('../lib/challengeUtils')
+import config from 'config'
+import jws from 'jws'
 
-const utils = require('../lib/utils')
+import * as utils from '../lib/utils'
 const security = require('../lib/insecurity')
 const jwt = require('jsonwebtoken')
-const jws = require('jws')
 const cache = require('../data/datacache')
 const challenges = cache.challenges
 const products = cache.products
-const config = require('config')
+
+exports.emptyUserRegistration = () => (req: Request, res: Response, next: NextFunction) => {
+  challengeUtils.solveIf(challenges.emptyUserRegistration, () => {
+    return req.body && req.body.email === '' && req.body.password === ''
+  })
+  next()
+}
 
 exports.forgedFeedbackChallenge = () => (req: Request, res: Response, next: NextFunction) => {
   challengeUtils.solveIf(challenges.forgedFeedbackChallenge, () => {
@@ -43,7 +50,9 @@ exports.captchaBypassChallenge = () => (req: Request, res: Response, next: NextF
 }
 
 exports.registerAdminChallenge = () => (req: Request, res: Response, next: NextFunction) => {
-  challengeUtils.solveIf(challenges.registerAdminChallenge, () => { return req.body && req.body.role === security.roles.admin })
+  challengeUtils.solveIf(challenges.registerAdminChallenge, () => {
+    return req.body && req.body.role === security.roles.admin
+  })
   next()
 }
 
@@ -54,6 +63,7 @@ exports.passwordRepeatChallenge = () => (req: Request, res: Response, next: Next
 
 exports.accessControlChallenges = () => ({ url }: Request, res: Response, next: NextFunction) => {
   challengeUtils.solveIf(challenges.scoreBoardChallenge, () => { return utils.endsWith(url, '/1px.png') })
+  challengeUtils.solveIf(challenges.web3SandboxChallenge, () => { return utils.endsWith(url, '/11px.png') })
   challengeUtils.solveIf(challenges.adminSectionChallenge, () => { return utils.endsWith(url, '/19px.png') })
   challengeUtils.solveIf(challenges.tokenSaleChallenge, () => { return utils.endsWith(url, '/56px.png') })
   challengeUtils.solveIf(challenges.privacyPolicyChallenge, () => { return utils.endsWith(url, '/81px.png') })
@@ -152,7 +162,7 @@ exports.databaseRelatedChallenges = () => (req: Request, res: Response, next: Ne
 function changeProductChallenge (osaft: Product) {
   let urlForProductTamperingChallenge: string | null = null
   void osaft.reload().then(() => {
-    for (const product of config.products) {
+    for (const product of config.get<Product[]>('products')) {
       if (product.urlForProductTamperingChallenge !== undefined) {
         urlForProductTamperingChallenge = product.urlForProductTamperingChallenge
         break
@@ -372,10 +382,10 @@ function dlpPastebinDataLeakChallenge () {
 }
 
 function dangerousIngredients () {
-  const ingredients: Array<{ [op: symbol]: string }> = []
-  const dangerousProduct = config.get('products').filter((product: Product) => product.keywordsForPastebinDataLeakChallenge)[0]
-  dangerousProduct.keywordsForPastebinDataLeakChallenge.forEach((keyword: string) => {
-    ingredients.push({ [Op.like]: `%${keyword}%` })
-  })
-  return ingredients
+  return config.get<Product[]>('products')
+    .flatMap((product: Product) => product.keywordsForPastebinDataLeakChallenge)
+    .filter(Boolean)
+    .map((keyword) => {
+      return { [Op.like]: `%${keyword}%` }
+    })
 }

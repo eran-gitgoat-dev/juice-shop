@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { Request, Response } from 'express'
+import { type Request, type Response } from 'express'
 import { RecycleModel } from '../models/recycle'
 
-const utils = require('../lib/utils')
+import * as utils from '../lib/utils'
 
 exports.getRecycleItem = () => (req: Request, res: Response) => {
   RecycleModel.findAll({

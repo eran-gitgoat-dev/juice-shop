@@ -4,9 +4,9 @@
  */
 
 import path = require('path')
-import { Request, Response, NextFunction } from 'express'
+import { type Request, type Response, type NextFunction } from 'express'
 
-const utils = require('../lib/utils')
+import * as utils from '../lib/utils'
 
 module.exports = function serveAngularClient () {
   return ({ url }: Request, res: Response, next: NextFunction) => {

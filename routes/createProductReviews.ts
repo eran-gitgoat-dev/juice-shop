@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { Request, Response } from 'express'
+import { type Request, type Response } from 'express'
 import challengeUtils = require('../lib/challengeUtils')
 
-const reviews = require('../data/mongodb').reviews
+import * as utils from '../lib/utils'
 
-const utils = require('../lib/utils')
+const reviews = require('../data/mongodb').reviews
 const challenges = require('../data/datacache').challenges
 const security = require('../lib/insecurity')
 
@@ -25,7 +25,7 @@ module.exports = function productReviews () {
     }).then(() => {
       res.status(201).json({ status: 'success' })
     }, (err: unknown) => {
-      res.status(500).json(utils.get(err))
+      res.status(500).json(utils.getErrorMessage(err))
     })
   }
 }

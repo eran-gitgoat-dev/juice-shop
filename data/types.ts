@@ -1,4 +1,4 @@
-import { Model } from 'sequelize/types'
+import { type Model } from 'sequelize/types'
 
 export interface Challenge extends Model {
   name: string
@@ -70,7 +70,7 @@ export interface Product extends Model {
   id: number
   name: string
   description: string
-  price?: number
+  price: number
   deluxePrice?: number
   quantity?: number
   limitPerUser?: number
@@ -82,6 +82,7 @@ export interface Product extends Model {
   keywordsForPastebinDataLeakChallenge?: string[]
   urlForProductTamperingChallenge?: string
   fileForRetrieveBlueprintChallenge?: string
+  exifForBlueprintChallenge?: string[]
 }
 
 export interface Review extends Model {

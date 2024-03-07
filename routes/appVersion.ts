@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: MIT
  */
 
-import config = require('config')
-import { Request, Response } from 'express'
+import config from 'config'
+import { type Request, type Response } from 'express'
 
-const utils = require('../lib/utils')
+import * as utils from '../lib/utils'
 
 module.exports = function retrieveAppVersion () {
   return (_req: Request, res: Response) => {

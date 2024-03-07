@@ -4,7 +4,7 @@
  */
 
 import frisby = require('frisby')
-import config = require('config')
+import config from 'config'
 
 const URL = 'http://localhost:3000'
 
@@ -48,7 +48,7 @@ describe('/profile', () => {
     form.append('username', 'Localhorst')
 
     return frisby.post(`${URL}/profile`, {
-      // @ts-expect-error
+      // @ts-expect-error FIXME form.getHeaders() is not found
       headers: { 'Content-Type': form.getHeaders()['content-type'], Cookie: authHeader.Cookie },
       body: form,
       redirect: 'manual'
@@ -61,7 +61,7 @@ describe('/profile', () => {
     form.append('username', 'Localhorst')
 
     return frisby.post(`${URL}/profile`, {
-      // @ts-expect-error
+      // @ts-expect-error FIXME form.getHeaders() is not found
       headers: { 'Content-Type': form.getHeaders()['content-type'] },
       body: form
     })

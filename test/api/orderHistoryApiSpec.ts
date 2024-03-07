@@ -4,7 +4,8 @@
  */
 
 import frisby = require('frisby')
-import config = require('config')
+import { expect } from '@jest/globals'
+import config from 'config'
 
 const jsonHeader = { 'content-type': 'application/json' }
 const REST_URL = 'http://localhost:3000/rest'

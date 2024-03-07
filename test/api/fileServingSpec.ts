@@ -4,8 +4,8 @@
  */
 
 import frisby = require('frisby')
-import config = require('config')
-import { Product } from '../../data/types'
+import config from 'config'
+import { type Product } from '../../data/types'
 const utils = require('../../lib/utils')
 
 const URL = 'http://localhost:3000'

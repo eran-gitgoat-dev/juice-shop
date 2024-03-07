@@ -4,7 +4,8 @@
  */
 
 import frisby = require('frisby')
-import config = require('config')
+import { expect } from '@jest/globals'
+import config from 'config'
 
 const API_URL = 'http://localhost:3000/api'
 const REST_URL = 'http://localhost:3000/rest'
