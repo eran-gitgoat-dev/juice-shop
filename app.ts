@@ -4,6 +4,7 @@
  */
 
 require('./lib/startup/validateDependencies')().then(() => {
+  //foo
   const server = require('./server')
   server.start()
 })
